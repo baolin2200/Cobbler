@@ -132,12 +132,12 @@ COPYING.elilo  COPYING.syslinux  COPYING.yaboot  elilo-ia64.efi  grub-x86_64.efi
 5. 安装提示执行 "systemctl enable rsyncd";
 [root@linux-node1 ~]# systemctl enable rsyncd
 6. 待定;
-7. 创建默认网页用户及密码：
-[root@linux-node1 ~]# openssl passwd -1 -salt 'admin' 'password'
-$1$admin$mZhVCYpQb/nUmzdFCQFBs0
+7. 创建默认系统用户及密码：
+[root@linux-node1 ~]# openssl passwd -1 -salt 'root' 'password'
+$1$root$1fvaXuILgb4rdRlHdQ80N/
 修改密码为创建的加密码：
 [root@linux-node1 ~]# grep default_password /etc/cobbler/settings
-default_password_crypted: "$1$admin$mZhVCYpQb/nUmzdFCQFBs0"
+default_password_crypted: "$1$root$1fvaXuILgb4rdRlHdQ80N/"
 8. 待定;
 重启cobblerd后再做检查：
 还差两项，一个为debian系统相关，一个为电源管理设备相关，此处暂不做调整;
@@ -473,14 +473,29 @@ Virt Type                      : kvm
 [root@linux-node1 kickstarts]# cobbler sync
 </pre>
 ###部署操作系统
-\#新建一台机器，通过网络启动即可。    
-![加载DHCP池选择加载系统类型](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%BC%80%E6%9C%BA1%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F.jpg)
+1. 新建一台机器，通过网络启动即可。    
+![图-1加载DHCP池选择加载系统类型](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%BC%80%E6%9C%BA1%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F.jpg)
+
+2. 选择从Centos7.2安装系统。   
+![图-2选择Centos7.2安装系统]()
+
+3. 登陆操作系统检查配置    
+![图-3检查配置]()
+
+###定制化安装
+&emsp;&emsp;Cobbler支持设备的物理MAC地址来区分设备，针对不同设备安装操作系统。   
+1. 查看虚拟机的MAC地址方法：     
+![图-4查看虚拟机设备的MAC地址]()
 
 
 
 
-后文补充：
-cobbler distro remove --name=CentOS-7
+
+
+
+
+
+
 
 
 
