@@ -515,18 +515,18 @@ CentOS-7.2-x86_64
 * 指定要选择重装的系统
 <pre>
 [root@linux-node2 ~]# koan --replace-self --server=192.168.56.11 --profile=CentOS-6.6-x86_64
-- looking for Cobbler at http://192.168.56.11:80/cobbler_api
-- reading URL: http://192.168.56.11/cblr/svc/op/ks/profile/CentOS-6.6-x86_64
+\- looking for Cobbler at http://192.168.56.11:80/cobbler_api
+\- reading URL: http://192.168.56.11/cblr/svc/op/ks/profile/CentOS-6.6-x86_64
 install_tree: http://192.168.56.11/cblr/links/CentOS-6.6-x86_64
 downloading initrd initrd.img to /boot/initrd.img_koan
 url=http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/initrd.img
-- reading URL: http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/initrd.img
+\- reading URL: http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/initrd.img
 downloading kernel vmlinuz to /boot/vmlinuz_koan
 url=http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/vmlinuz
-- reading URL: http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/vmlinuz
-- ['/sbin/grubby', '--add-kernel', '/boot/vmlinuz_koan', '--initrd', '/boot/initrd.img_koan', '--args', '"ks=http://192.168.56.11/cblr/svc/op/ks/profile/CentOS-6.6-x86_64 ksdevice=link kssendmac lang= text "', '--copy-default', '--make-default', '--title=kick1464941350']
-- ['/sbin/grubby', '--update-kernel', '/boot/vmlinuz_koan', '--remove-args=root']
-- reboot to apply changes
+\- reading URL: http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/vmlinuz
+\- ['/sbin/grubby', '--add-kernel', '/boot/vmlinuz_koan', '--initrd', '/boot/initrd.img_koan', '--args', '"ks=http://192.168.56.11/cblr/svc/op/ks/profile/CentOS-6.6-x86_64 ksdevice=link kssendmac lang= text "', '--copy-default', '--make-default', '--title=kick1464941350']
+\- ['/sbin/grubby', '--update-kernel', '/boot/vmlinuz_koan', '--remove-args=root']
+\- reboot to apply changes
 </pre>
 * 重启需要重装的系统,发现系统已经按照指定的镜像重新安装为CentOS6.6操作系统
 <pre>
