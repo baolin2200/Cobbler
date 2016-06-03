@@ -367,7 +367,6 @@ Owners                         : ['admin']
 Red Hat Management Key         : <<inherit>>
 Red Hat Management Server      : <<inherit>>
 Template Files                 : {}
-
 Name                           : CentOS-7.2-x86_64		###名称
 Architecture                   : x86_64
 TFTP Boot Files                : {}
@@ -424,8 +423,7 @@ Virt Disk Driver Type          : raw
 Virt File Size(GB)             : 5
 Virt Path                      : 
 Virt RAM (MB)                  : 512
-Virt Type                      : kvm
-
+Virt Type                      : kvm   
 Name                           : CentOS-7.2-x86_64		###名称
 TFTP Boot Files                : {}
 Comment                        : 
@@ -466,7 +464,7 @@ Virt Type                      : kvm
 * 每次修改完都要执行一次同步
 <pre>
 [root@linux-node1 kickstarts]# cobbler sync
-</pre>
+</pre>   
 ##1.12部署操作系统
 1. 新建一台机器，通过网络启动即可。    
 ![图-1加载DHCP池选择加载系统类型](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE1-%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F.jpg)
