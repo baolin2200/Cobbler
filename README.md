@@ -214,8 +214,8 @@ ddns-update-style interim;
 \......
 </pre>
 
-##Cobbler的命令行管理
-\#查看帮助
+##1.9Cobbler的命令行管理
+* 查看帮助
 <pre>
 [root@linux-node1 ~]# cobbler
 usage
@@ -224,7 +224,7 @@ cobbler <distro|profile|system|repo|image|mgmtclass|package|file> ...
         [add|edit|copy|getks*|list|remove|rename|report] [options|--help]
 cobbler <aclsetup|buildiso|import|list|replicate|report|reposync|sync|validateks|version|signature|get-loaders|hardlink> [options|--help]
 </pre>
-\#导入镜像参数
+* 导入镜像参数
 <pre>
 [root@linux-node1 ~]# cobbler import --help
 Usage: cobbler [options]
@@ -244,7 +244,7 @@ Options:
   --rsync-flags=RSYNC_FLAGS
                         pass additional flags to rsync
 </pre>
-\#常见参数注释：
+* 常见参数注释：
 <pre>
 cobbler check    核对当前设置是否有问题
 cobbler list     列出所有的cobbler元素
@@ -269,13 +269,13 @@ cobbler distro remove
 cobbler distro rename
 cobbler distro report
 </pre>
-##导入镜像文件
-\#挂载系统光盘
+##1.10导入镜像文件
+* 挂载系统光盘
 <pre>
 [root@linux-node1 ~]# mount /dev/cdrom /mnt
 mount: /dev/sr0 写保护，将以只读方式挂载
 </pre>
-\#导入操作系统来自于/mnt下
+* 导入操作系统来自于/mnt下
 <pre>
 [root@linux-node1 ~]# cobbler import --path=/mnt/ --name=CentOS-7.2-x86_64 --arch=x86_64 
 task started: 2016-06-03_102402_import
@@ -324,7 +324,7 @@ CentOS-6.6-x86_64  CentOS-7.2-x86_64  config
 <pre>
 [root@linux-node1 ~]# cobbler distro remove --name=CentOS-7xxx
 </pre>
-##指定ks.cfg文件调整内核参数
+##1.11指定ks.cfg文件调整内核参数
 &emsp;&emsp;Cobbler使用ks.cfg文件来制定所需要的安装配置，分区，网络，主机名等开机优化操作，还可以指定系统安装相应的软件。   
 Cobbler-CentOS-7.2-x86_64.cfg   
 Cobbler-CentOS-6.6-x86_64.cfg   
@@ -467,7 +467,7 @@ Virt Type                      : kvm
 <pre>
 [root@linux-node1 kickstarts]# cobbler sync
 </pre>
-##部署操作系统
+##1.12部署操作系统
 1. 新建一台机器，通过网络启动即可。    
 ![图-1加载DHCP池选择加载系统类型](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE1-%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F.jpg)
 
@@ -477,7 +477,7 @@ Virt Type                      : kvm
 3. 登陆操作系统检查配置    
 ![图-3检查配置](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE3-%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F%E6%9F%A5%E7%9C%8B%E9%85%8D%E7%BD%AE1.jpg)
 
-##定制化安装
+##1.13定制化安装
 1. Cobbler支持设备的物理MAC地址来区分设备，针对不同设备安装操作系统
 2. 查看虚拟机的MAC地址方法    
 ![图-4查看虚拟机设备的MAC地址](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE4-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%94%9F%E6%88%90MAC%E5%9C%B0%E5%9D%80.jpg)
@@ -496,15 +496,45 @@ Virt Type                      : kvm
    linux-Centos7.2-test
 </pre>
 * 打开MAC地址为"00:50:56:38:F3:C5"的机器发现会自动安装预选的操作系统   
-![图5-自动安装无需选择]()
+![图5-自动安装无需选择](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE5-%E8%87%AA%E5%8A%A8%E5%AE%89%E8%A3%85%E6%97%A0%E9%9C%80%E9%80%89%E6%8B%A9.jpg)
 * 检查新安装的设备，IP、掩码、网关、DNS、主机名、等等配置   
-![图6-检查自定义配置]()
+![图6-检查自定义配置](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE6-%E6%A3%80%E6%9F%A5%E8%87%AA%E5%AE%9A%E4%B9%89%E9%85%8D%E7%BD%AE.jpg)
 
-##指定设备系统重装
+##1.14指定设备系统重装
 * 有些需要重新安装的系统希望reboot后自动重装
-
-
-##自定义登陆界面
+* **在需要重装的机器上面！！！安装koan注意yum源**
+<pre>
+[root@linux-node2 ~]# rpm -ivh http://mirrors.aliyun.com/epel/epel-release-latest-7.noarch.rpm
+[root@linux-node2 ~]# yum install -y koan
+</pre>
+* 检查在Cobbler上面有可选择的img
+<pre>
+[root@linux-node2 ~]# koan --server=192.168.56.11 --list=profiles
+- looking for Cobbler at http://192.168.56.11:80/cobbler_api
+CentOS-6.6-x86_64
+CentOS-7.2-x86_64
+</pre>
+* 指定要选择重装的系统
+<pre>
+[root@linux-node2 ~]# koan --replace-self --server=192.168.56.11 --profile=CentOS-6.6-x86_64
+- looking for Cobbler at http://192.168.56.11:80/cobbler_api
+- reading URL: http://192.168.56.11/cblr/svc/op/ks/profile/CentOS-6.6-x86_64
+install_tree: http://192.168.56.11/cblr/links/CentOS-6.6-x86_64
+downloading initrd initrd.img to /boot/initrd.img_koan
+url=http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/initrd.img
+- reading URL: http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/initrd.img
+downloading kernel vmlinuz to /boot/vmlinuz_koan
+url=http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/vmlinuz
+- reading URL: http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/vmlinuz
+- ['/sbin/grubby', '--add-kernel', '/boot/vmlinuz_koan', '--initrd', '/boot/initrd.img_koan', '--args', '"ks=http://192.168.56.11/cblr/svc/op/ks/profile/CentOS-6.6-x86_64 ksdevice=link kssendmac lang= text "', '--copy-default', '--make-default', '--title=kick1464941350']
+- ['/sbin/grubby', '--update-kernel', '/boot/vmlinuz_koan', '--remove-args=root']
+- reboot to apply changes
+</pre>
+* 重启需要重装的系统,发现系统已经按照指定的镜像重新安装为CentOS6.6操作系统
+<pre>
+[root@linux-node2 ~]# reboot
+</pre>
+##1.15自定义登陆界面
 * 打个广告：
 <pre>
 [root@linux-node1 ~]# grep baolin2200 /etc/cobbler/pxe/pxedefault.template 
@@ -515,11 +545,9 @@ MENU TITLE Cobbler | //https://github.com/baolin2200
 [root@linux-node1 ~]# cobbler sync
 </pre>
 * 效果图   
-![图7-修改登录界面]()
+![图7-修改登录界面](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE7-%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA.jpg)
 
 
-
-
-
-
-
+###前文提到的cfg附件
+[http://CentOS-6-x86_64.cfg](http://)
+[http://CentOS-7-x86_64.cfg](http://)
