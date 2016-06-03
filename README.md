@@ -253,12 +253,12 @@ cobbler reposync 同步yum仓库
 cobbler distro   查看导入的发行版系统信息
 cobbler system   查看添加的系统信息
 cobbler profile  查看配置信息
-
-\#可单个执行查看帮助信息
+</pre>
+* 可单个执行查看帮助信息    
 例：
+<pre>
 [root@linux-node1 ~]# cobbler distro
 usage
-=====
 cobbler distro add
 cobbler distro copy
 cobbler distro edit
