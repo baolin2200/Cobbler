@@ -508,7 +508,7 @@ Virt Type                      : kvm
 * 检查在Cobbler上面有可选择的img
 <pre>
 [root@linux-node2 ~]# koan --server=192.168.56.11 --list=profiles
-- looking for Cobbler at http://192.168.56.11:80/cobbler_api
+\- looking for Cobbler at http://192.168.56.11:80/cobbler_api
 CentOS-6.6-x86_64
 CentOS-7.2-x86_64
 </pre>
@@ -548,5 +548,5 @@ MENU TITLE Cobbler | //https://github.com/baolin2200
 
 
 ##1.16附件
-[http://CentOS-6-x86_64.cfg](http://)
-[http://CentOS-7-x86_64.cfg](http://)
+[http://CentOS-6-x86_64.cfg](https://github.com/baolin2200/Cobbler/blob/master/cfg/CentOS-6-x86_64.cfg)  
+[http://CentOS-7-x86_64.cfg](https://github.com/baolin2200/Cobbler/blob/master/cfg/CentOS-7-x86_64.cfg)
