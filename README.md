@@ -2,13 +2,13 @@
 自动化操作系统部署Cobbler
 
 >注：本文内容参考自互联网，版权归属于互联网，感谢老男孩、徐布斯
-###1.1 Cobbler简介
+##1.1 Cobbler简介
 &emsp;&emsp;Cobbler 可以用来快速建立 Linux 网络安装环境，它已将 Linux 网络安装的技术门槛，从大专以上文化水平，成功降低到初中以下，连补鞋匠都能学会。
 
 &emsp;&emsp;Cobbler是一个Linux服务器安装的服务，可以通过网络启动(PXE)的方式来快速安装、重装物理服务器和虚拟机，同时还可以管理DHCP，DNS等。Cobbler可以使用命令行方式管理，也提供了基于Web的界面管理工具(cobbler-web)，还提供了API接口，可以方便二次开发使用。
 #####摘自百度百科
 &emsp;&emsp;网络安装服务器套件 Cobbler(补鞋匠)从前，我们一直在做装机民工这份很有前途的职业。自打若干年前 Red Hat 推出了 Kickstart，此后我们顿觉身价倍增。不再需要刻了光盘一台一台地安装 Linux，只要搞定 PXE、DHCP、TFTP，还有那满屏眼花缭乱不知所云的 Kickstart 脚本，我们就可以像哈里波特一样，轻点魔棒，瞬间安装上百台服务器。这一堆花里胡哨的东西可不是一般人都能整明白的，没有大专以上学历，通不过英语四级， 根本别想玩转。总而言之，这是一份多么有前途，多么有技术含量的工作啊。很不幸，Red Hat 最新（Cobbler项目最初在2008年左右发布）发布了网络安装服务器套件 Cobbler(补鞋匠)，它已将 Linux 网络安装的技术门槛，从大专以上文化水平，成功降低到初中以下，连补鞋匠都能学会。对于我们这些在装机领域浸淫多年，经验丰富，老骥伏枥，志在千里的民工兄弟们来说，不为一个晴天霹雳。
-###1.2 环境准备
+##1.2 环境准备
 <pre>
 1. 查看系统版本
 [root@linux-node1 ~]# cat /etc/redhat-release 
@@ -41,8 +41,7 @@ linux-node1
 7. 安装yum源
 [root@linux-node1 ~]# rpm -ivh http://mirrors.aliyun.com/epel/epel-release-latest-7.noarch.rpm
 </pre>
-
-###1.3 安装Cobbler
+##1.3 安装Cobbler
 <pre>
 [root@linux-node1 ~]# yum install cobbler cobbler-web pykickstart httpd dhcp tftp xinetd -y
 包说明：
@@ -53,7 +52,7 @@ httpd            #Apache web服务
 dhcp             #Dhcp服务
 tftp             #Tftp服务
 </pre>
-###1.4 重要配置文件注释：
+##1.4 重要配置文件注释：
 <pre>
 [root@linux-node1 ~]# rpm -ql cobbler
 /etc/cobbler                  # 配置文件目录
@@ -80,8 +79,7 @@ tftp             #Tftp服务
 /var/log/cobbler/install.log  # 客户端系统安装日志
 /var/log/cobbler/cobbler.log  # cobbler日志
 </pre>
-
-###1.5 启动服务
+##1.5 启动服务
 <pre>
 cobbler的运行依赖于dhcp、tftp、rsync及dns服务。
 [root@linux-node1 ~]# systemctl start httpd
@@ -100,8 +98,7 @@ udp        0      0 0.0.0.0:35847           0.0.0.0:*                           
 udp        0      0 0.0.0.0:68              0.0.0.0:*                           4122/dhclient       
 udp6       0      0 :::11445                :::*                                4122/dhclient 
 </pre>
-
-###1.6 检查Cobbler的配置，如果看不到下面的结果，再次执行systemctl start cobblerd
+##1.6 检查Cobbler的配置，如果看不到下面的结果，再次执行systemctl start cobblerd
 <pre>
 [root@linux-node1 ~]# cobbler check
 The following are potential configuration items that you may want to fix:
@@ -148,8 +145,7 @@ The following are potential configuration items that you may want to fix:
 2 : fencing tools were not found, and are required to use the (optional) power management features. install cman or fence-agents to use them
 Restart cobblerd and then run 'cobbler sync' to apply changes.
 </pre>
-
-###1.7 配置DHCP
+##1.7 配置DHCP
 <pre>
 此参数为1时表示使用，cobbler管理dhcp
 [root@linux-node1 ~]# sed -i 's#manage_dhcp: 0#manage_dhcp: 1#g' /etc/cobbler/settings
@@ -163,7 +159,7 @@ subnet 192.168.56.0 netmask 255.255.255.0 {
      range dynamic-bootp        192.168.56.200 192.168.56.254;
 \......
 </pre>
-###1.8 同步Cobbler配置
+##1.8 同步Cobbler配置
 <pre>
 \#同步最新cobbler配置，它会根据配置自动修改dhcp等服务。
 [root@linux-node1 ~]# systemctl restart xinetd 
@@ -218,7 +214,7 @@ ddns-update-style interim;
 \......
 </pre>
 
-###Cobbler的命令行管理
+##Cobbler的命令行管理
 \#查看帮助
 <pre>
 [root@linux-node1 ~]# cobbler
@@ -273,7 +269,7 @@ cobbler distro remove
 cobbler distro rename
 cobbler distro report
 </pre>
-###导入镜像文件
+##导入镜像文件
 \#挂载系统光盘
 <pre>
 [root@linux-node1 ~]# mount /dev/cdrom /mnt
@@ -308,51 +304,50 @@ Keeping repodata as-is :/var/www/cobbler/ks_mirror/CentOS-7.2-x86_64/repodata
 # 安装源的唯一标示就是根据name参数来定义，本例导入成功后，安装源的唯一标示就是：CentOS-7.2-x86_64，如果重复，系统会提示导入失败。
 #镜像存放目录，cobbler会将镜像中的所有安装文件拷贝到本地一份，放在/var/www/cobbler/ks_mirror下的CentOS-7.2-x86_64-distro-x86_64目录下。因此/var/www/cobbler目录必须具有足够容纳安装文件的空间。
 </pre>
-\#区分多样化，在导入一份CentOS-6.6操作系统
+* 区分多样化，在导入一份CentOS-6.6操作系统
 <pre>
 [root@linux-node1 ~]# cobbler import --path=/mnt/ --name=CentOS-6.6-x86_64 --arch=x86_64  
 </pre>
-\#查看镜像列表：
+* 查看镜像列表：
 <pre>
 [root@linux-node1 ~]# cobbler distro list
    CentOS-6.6-x86_64
    CentOS-7.2-x86_64
 </pre>
-\#镜像文件所在位置：
+* 镜像文件所在位置：
 <pre>
 [root@linux-node1 ~]# ls /var/www/cobbler/ks_mirror/
 CentOS-6.6-x86_64  CentOS-7.2-x86_64  config
 </pre>
 
-\#删除指定的镜像文件img
+* 删除指定的镜像文件img
 <pre>
 [root@linux-node1 ~]# cobbler distro remove --name=CentOS-7xxx
 </pre>
-###指定ks.cfg文件调整内核参数
+##指定ks.cfg文件调整内核参数
 &emsp;&emsp;Cobbler使用ks.cfg文件来制定所需要的安装配置，分区，网络，主机名等开机优化操作，还可以指定系统安装相应的软件。   
 Cobbler-CentOS-7.2-x86_64.cfg   
 Cobbler-CentOS-6.6-x86_64.cfg   
 配置文件上传至至附件，见文章底部；
 
-\#Cobbler的默认ks.cfg文件存放位置；
+* Cobbler的默认ks.cfg文件存放位置；
 <pre>
 [root@linux-node1 ~]# ls /var/lib/cobbler/kickstarts/
 default.ks    esxi5-ks.cfg      legacy.ks     sample_autoyast.xml  sample_esx4.ks   sample_esxi5.ks  sample_old.seed
 esxi4-ks.cfg  install_profiles  pxerescue.ks  sample_end.ks（默认使用的ks文件）        sample_esxi4.ks  sample.ks  
 </pre>
-\#上传准备好的cfg 文件到/var/lib/cobbler/kickstarts/路径，并修改distro list镜像对应的cfg文件；
+* 上传准备好的cfg 文件到/var/lib/cobbler/kickstarts/路径，并修改distro list镜像对应的cfg文件；
 <pre>
 [root@linux-node1 kickstarts]# cobbler profile edit --name=CentOS-7.2-x86_64 --kickstart=/var/lib/cobbler/kickstarts/CentOS-7.2-x86_64.cfg 
 [root@linux-node1 kickstarts]# cobbler profile edit --name=CentOS-6.6-x86_64 --kickstart=/var/lib/cobbler/kickstarts/CentOS-6.6-x86_64.cfg 
 </pre>
 
-\#
-CentOS7系统网卡名变成eno…这种，为了运维标准化，我们需要修改为我们常用的eth0，使用下面的参数。但要注意是CentOS7才需要下面的步骤，CentOS6不需要。
+* CentOS7系统网卡名变成eno…这种，为了运维标准化，我们需要修改为我们常用的eth0，使用下面的参数。但要注意是CentOS7才需要下面的步骤，CentOS6不需要。
 <pre>
 [root@linux-node1 kickstarts]# cobbler profile edit --name=CentOS-7.2-x86_64 --kopts='net.ifnames=0 biosdevname=0'
 </pre>
 
-\#查看安装img镜像文件信息
+* 查看安装img镜像文件信息
 <pre>
 [root@linux-node1 kickstarts]#cobbler distro report
 NAME                           : centos-6.6-x86_64		###名称
@@ -391,11 +386,11 @@ Red Hat Management Key         : <<inherit>>
 Red Hat Management Server      : <<inherit>>
 Template Files                 : {}
 </pre>
-\#查看指定的img镜像文件：
+* 查看指定的img镜像文件：
 <pre>
 [root@linux-node1 kickstarts]# cobbler distro report --name=CentOS-7.2-x86_64
 </pre>
-\#查看所有的cfg配置文件内容：
+* 查看所有的cfg配置文件内容：
 <pre>
 [root@linux-node1 kickstarts]# cobbler profile report
 Name                           : CentOS-6.6-x86_64		###名称
@@ -464,15 +459,15 @@ Virt Path                      :
 Virt RAM (MB)                  : 512
 Virt Type                      : kvm
 </pre>
-\#可以指定名称查看某一个配置的cfg文件：
+* 可以指定名称查看某一个配置的cfg文件：
 <pre>
 [root@linux-node1 kickstarts]# cobbler profile report --name=CentOS-7.2-x86_64
 </pre>
-\#每次修改完都要执行一次同步
+* 每次修改完都要执行一次同步
 <pre>
 [root@linux-node1 kickstarts]# cobbler sync
 </pre>
-###部署操作系统
+##部署操作系统
 1. 新建一台机器，通过网络启动即可。    
 ![图-1加载DHCP池选择加载系统类型](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE1-%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F.jpg)
 
@@ -482,20 +477,45 @@ Virt Type                      : kvm
 3. 登陆操作系统检查配置    
 ![图-3检查配置](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE3-%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F%E6%9F%A5%E7%9C%8B%E9%85%8D%E7%BD%AE1.jpg)
 
-###定制化安装
-&emsp;&emsp;Cobbler支持设备的物理MAC地址来区分设备，针对不同设备安装操作系统。   
-1. 查看虚拟机的MAC地址方法：     
+##定制化安装
+1. Cobbler支持设备的物理MAC地址来区分设备，针对不同设备安装操作系统
+2. 查看虚拟机的MAC地址方法    
 ![图-4查看虚拟机设备的MAC地址](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE4-%E8%99%9A%E6%8B%9F%E6%9C%BA%E7%94%9F%E6%88%90MAC%E5%9C%B0%E5%9D%80.jpg)
 
+3. Cobbler可以自定义配置网络接口，通过system来固定机器的IP、掩码、网关、DNS、主机名、等等实现基础环境标准化  
+<pre>
+[root@linux-node1 ~]# cobbler system add --name=linux-Centos7.2-test --mac=00:50:56:38:F3:C5 --profile=CentOS-7.2-x86_64 \
+--ip-address=192.168.56.13 --subnet=255.255.255.0 --gateway=192.168.56.2 --interface=eth0 \
+--static=1 --hostname=linux-node2.com --name-servers="192.168.56.2" \
+--kickstart=/var/lib/cobbler/kickstarts/CentOS-7.2-x86_64.cfg
+\#--name 自定义，但不能重复
+</pre>
+* 查看定义的列表
+<pre>
+[root@linux-node1 ~]# cobbler system list
+   linux-Centos7.2-test
+</pre>
+* 打开MAC地址为"00:50:56:38:F3:C5"的机器发现会自动安装预选的操作系统   
+![图5-自动安装无需选择]()
+* 检查新安装的设备，IP、掩码、网关、DNS、主机名、等等配置   
+![图6-检查自定义配置]()
+
+##指定设备系统重装
+* 有些需要重新安装的系统希望reboot后自动重装
 
 
-
-
-
-
-
-
-
+##自定义登陆界面
+* 打个广告：
+<pre>
+[root@linux-node1 ~]# grep baolin2200 /etc/cobbler/pxe/pxedefault.template 
+MENU TITLE Cobbler | //https://github.com/baolin2200
+</pre>
+* 每次修改完都要执行一次同步
+<pre>
+[root@linux-node1 ~]# cobbler sync
+</pre>
+* 效果图   
+![图7-修改登录界面]()
 
 
 
