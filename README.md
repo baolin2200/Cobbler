@@ -464,15 +464,14 @@ Virt Type                      : kvm
 * 每次修改完都要执行一次同步
 <pre>
 [root@linux-node1 kickstarts]# cobbler sync
-</pre>   
+</pre>
+
 ##1.12部署操作系统
-1. 新建一台机器，通过网络启动即可。    
+* 新建一台机器，通过网络启动即可。    
 ![图-1加载DHCP池选择加载系统类型](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE1-%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F.jpg)
-
-2. 选择从Centos7.2安装系统。   
+* 选择从Centos7.2安装系统。   
 ![图-2选择Centos7.2安装系统](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE2-%E9%80%89%E6%8B%A9Centos7%E7%B3%BB%E7%BB%9F.jpg)
-
-3. 登陆操作系统检查配置    
+* 登陆操作系统检查配置    
 ![图-3检查配置](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE3-%E7%99%BB%E9%99%86%E7%B3%BB%E7%BB%9F%E6%9F%A5%E7%9C%8B%E9%85%8D%E7%BD%AE1.jpg)
 
 ##1.13定制化安装
@@ -548,5 +547,5 @@ MENU TITLE Cobbler | //https://github.com/baolin2200
 
 
 ##1.16附件
-[http://CentOS-6-x86_64.cfg](https://github.com/baolin2200/Cobbler/blob/master/cfg/CentOS-6-x86_64.cfg)  
-[http://CentOS-7-x86_64.cfg](https://github.com/baolin2200/Cobbler/blob/master/cfg/CentOS-7-x86_64.cfg)
+[CentOS-6-x86_64.cfg](https://github.com/baolin2200/Cobbler/blob/master/cfg/CentOS-6-x86_64.cfg)  
+[CentOS-7-x86_64.cfg](https://github.com/baolin2200/Cobbler/blob/master/cfg/CentOS-7-x86_64.cfg)
