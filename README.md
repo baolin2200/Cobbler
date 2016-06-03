@@ -547,5 +547,6 @@ MENU TITLE Cobbler | //https://github.com/baolin2200
 
 
 ##1.16附件
+* 请选择右键目标另存为。
 [CentOS-6-x86_64.cfg](https://github.com/baolin2200/Cobbler/blob/master/cfg/CentOS-6-x86_64.cfg)  
 [CentOS-7-x86_64.cfg](https://github.com/baolin2200/Cobbler/blob/master/cfg/CentOS-7-x86_64.cfg)
