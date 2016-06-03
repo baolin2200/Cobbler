@@ -472,11 +472,9 @@ Virt Type                      : kvm
 <pre>
 [root@linux-node1 kickstarts]# cobbler sync
 </pre>
-
-
-新建一台机器，通过网络启动即可。
+###部署操作系统
+\#新建一台机器，通过网络启动即可。    
 ![加载DHCP池选择加载系统类型](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%BC%80%E6%9C%BA1%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F.jpg)
-https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%BC%80%E6%9C%BA1%E9%80%89%E6%8B%A9%E7%B3%BB%E7%BB%9F.jpg
 
 
 
