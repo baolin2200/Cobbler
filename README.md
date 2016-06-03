@@ -268,6 +268,7 @@ cobbler distro remove
 cobbler distro rename
 cobbler distro report
 </pre>
+
 ##1.10导入镜像文件
 * 挂载系统光盘
 <pre>
@@ -305,7 +306,7 @@ Keeping repodata as-is :/var/www/cobbler/ks_mirror/CentOS-7.2-x86_64/repodata
 </pre>
 * 区分多样化，在导入一份CentOS-6.6操作系统
 <pre>
-[root@linux-node1 ~]# cobbler import --path=/mnt/ --name=CentOS-6.6-x86_64 --arch=x86_64  
+[root@linux-node1 ~]# cobbler import --path=/mnt/ --name=CentOS-6.6-x86_64 --arch=x86_64
 </pre>
 * 查看镜像列表：
 <pre>
@@ -533,6 +534,7 @@ url=http://192.168.56.11/cobbler/images/CentOS-6.6-x86_64/vmlinuz
 <pre>
 [root@linux-node2 ~]# reboot
 </pre>
+
 ##1.15自定义登陆界面
 * 打个广告：
 <pre>
@@ -547,6 +549,6 @@ MENU TITLE Cobbler | //https://github.com/baolin2200
 ![图7-修改登录界面](https://github.com/baolin2200/Cobbler/blob/master/Image/%E5%9B%BE7-%E6%95%88%E6%9E%9C%E6%BC%94%E7%A4%BA.jpg)
 
 
-###前文提到的cfg附件
+##1.16附件
 [http://CentOS-6-x86_64.cfg](http://)
 [http://CentOS-7-x86_64.cfg](http://)
