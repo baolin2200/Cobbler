@@ -163,7 +163,7 @@ subnet 192.168.56.0 netmask 255.255.255.0 {
      range dynamic-bootp        192.168.56.200 192.168.56.254;
 \......
 </pre>
-###1.8 同步Cobbler
+###1.8 同步Cobbler配置
 <pre>
 \#同步最新cobbler配置，它会根据配置自动修改dhcp等服务。
 [root@linux-node1 ~]# systemctl restart xinetd 
@@ -273,8 +273,207 @@ cobbler distro remove
 cobbler distro rename
 cobbler distro report
 </pre>
+###导入镜像文件
+\#挂载系统光盘
+<pre>
+[root@linux-node1 ~]# mount /dev/cdrom /mnt
+mount: /dev/sr0 写保护，将以只读方式挂载
+</pre>
+\#导入操作系统来自于/mnt下
+<pre>
+[root@linux-node1 ~]# cobbler import --path=/mnt/ --name=CentOS-7.2-x86_64 --arch=x86_64 
+task started: 2016-06-03_102402_import
+task started (id=Media import, time=Fri Jun  3 10:24:02 2016)
+Found a candidate signature: breed=redhat, version=rhel6
+Found a candidate signature: breed=redhat, version=rhel7
+Found a matching signature: breed=redhat, version=rhel7
+Adding distros from path /var/www/cobbler/ks_mirror/CentOS-7.2-x86_64:
+creating new distro: CentOS-7.2-x86_64
+trying symlink: /var/www/cobbler/ks_mirror/CentOS-7.2-x86_64 -> /var/www/cobbler/links/CentOS-7.2-x86_64
+creating new profile: CentOS-7.2-x86_64
+associating repos
+checking for rsync repo(s)
+checking for rhn repo(s)
+checking for yum repo(s)
+starting descent into /var/www/cobbler/ks_mirror/CentOS-7.2-x86_64 for CentOS-7.2-x86_64
+processing repo at : /var/www/cobbler/ks_mirror/CentOS-7.2-x86_64
+need to process repo/comps: /var/www/cobbler/ks_mirror/CentOS-7.2-x86_64
+looking for /var/www/cobbler/ks_mirror/CentOS-7.2-x86_64/repodata/*comps*.xml
+Keeping repodata as-is :/var/www/cobbler/ks_mirror/CentOS-7.2-x86_64/repodata
+*** TASK COMPLETE ***
+#参数注释：
+# --path 镜像路径
+# --name 为安装源定义一个名字
+# --arch 指定安装源是32位、64位、ia64, 目前支持的选项有: x86│x86_64│ia64
+# 安装源的唯一标示就是根据name参数来定义，本例导入成功后，安装源的唯一标示就是：CentOS-7.2-x86_64，如果重复，系统会提示导入失败。
+#镜像存放目录，cobbler会将镜像中的所有安装文件拷贝到本地一份，放在/var/www/cobbler/ks_mirror下的CentOS-7.2-x86_64-distro-x86_64目录下。因此/var/www/cobbler目录必须具有足够容纳安装文件的空间。
+</pre>
+\#区分多样化，在导入一份CentOS-6.6操作系统
+<pre>
+[root@linux-node1 ~]# cobbler import --path=/mnt/ --name=CentOS-6.6-x86_64 --arch=x86_64  
+</pre>
+\#查看镜像列表：
+<pre>
+[root@linux-node1 ~]# cobbler distro list
+   CentOS-6.6-x86_64
+   CentOS-7.2-x86_64
+</pre>
+\#镜像文件所在位置：
+<pre>
+[root@linux-node1 ~]# ls /var/www/cobbler/ks_mirror/
+CentOS-6.6-x86_64  CentOS-7.2-x86_64  config
+</pre>
 
+\#删除指定的镜像文件img
+<pre>
+[root@linux-node1 ~]# cobbler distro remove --name=CentOS-7xxx
+</pre>
+###指定ks.cfg文件调整内核参数
+&emsp;&emsp;Cobbler使用ks.cfg文件来制定所需要的安装配置，分区，网络，主机名等开机优化操作，还可以指定系统安装相应的软件。   
+Cobbler-CentOS-7.2-x86_64.cfg   
+Cobbler-CentOS-6.6-x86_64.cfg   
+配置文件上传至至附件，见文章底部；
 
+\#Cobbler的默认ks.cfg文件存放位置；
+<pre>
+[root@linux-node1 ~]# ls /var/lib/cobbler/kickstarts/
+default.ks    esxi5-ks.cfg      legacy.ks     sample_autoyast.xml  sample_esx4.ks   sample_esxi5.ks  sample_old.seed
+esxi4-ks.cfg  install_profiles  pxerescue.ks  sample_end.ks（默认使用的ks文件）        sample_esxi4.ks  sample.ks  
+</pre>
+\#上传准备好的cfg 文件到/var/lib/cobbler/kickstarts/路径，并修改distro list镜像对应的cfg文件；
+<pre>
+[root@linux-node1 kickstarts]# cobbler profile edit --name=CentOS-7.2-x86_64 --kickstart=/var/lib/cobbler/kickstarts/CentOS-7.2-x86_64.cfg 
+[root@linux-node1 kickstarts]# cobbler profile edit --name=CentOS-6.6-x86_64 --kickstart=/var/lib/cobbler/kickstarts/CentOS-6.6-x86_64.cfg 
+</pre>
+
+\#
+CentOS7系统网卡名变成eno…这种，为了运维标准化，我们需要修改为我们常用的eth0，使用下面的参数。但要注意是CentOS7才需要下面的步骤，CentOS6不需要。
+<pre>
+[root@linux-node1 kickstarts]# cobbler profile edit --name=CentOS-7.2-x86_64 --kopts='net.ifnames=0 biosdevname=0'
+</pre>
+
+\#查看安装img镜像文件信息
+<pre>
+[root@linux-node1 kickstarts]#cobbler distro report
+NAME                           : centos-6.6-x86_64		###名称
+Architecture                   : x86_64
+TFTP Boot Files                : {}
+Breed                          : redhat
+Comment                        : 
+Fetchable Files                : {}
+Initrd                         : /var/www/cobbler/ks_mirror/CentOS-6.6-x86_64/images/pxeboot/initrd.img   ###镜像文件
+Kernel                         : /var/www/cobbler/ks_mirror/CentOS-6.6-x86_64/images/pxeboot/vmlinuz
+Kernel Options                 : {}
+Kernel Options (Post Install)  : {}
+Kickstart Metadata             : {'tree': 'http://@@http_server@@/cblr/links/CentOS-6.6-x86_64'}
+Management Classes             : []
+OS Version                     : rhel6
+Owners                         : ['admin']
+Red Hat Management Key         : <<inherit>>
+Red Hat Management Server      : <<inherit>>
+Template Files                 : {}
+
+Name                           : CentOS-7.2-x86_64		###名称
+Architecture                   : x86_64
+TFTP Boot Files                : {}
+Breed                          : redhat
+Comment                        : 
+Fetchable Files                : {}
+Initrd                         : /var/www/cobbler/ks_mirror/CentOS-7.2-x86_64/images/pxeboot/initrd.img   ###镜像文件
+Kernel                         : /var/www/cobbler/ks_mirror/CentOS-7.2-x86_64/images/pxeboot/vmlinuz
+Kernel Options                 : {}
+Kernel Options (Post Install)  : {}
+Kickstart Metadata             : {'tree': 'http://@@http_server@@/cblr/links/CentOS-7.2-x86_64'}
+Management Classes             : []
+OS Version                     : rhel7
+Owners                         : ['admin']
+Red Hat Management Key         : <<inherit>>
+Red Hat Management Server      : <<inherit>>
+Template Files                 : {}
+</pre>
+\#查看指定的img镜像文件：
+<pre>
+[root@linux-node1 kickstarts]# cobbler distro report --name=CentOS-7.2-x86_64
+</pre>
+\#查看所有的cfg配置文件内容：
+<pre>
+[root@linux-node1 kickstarts]# cobbler profile report
+Name                           : CentOS-6.6-x86_64		###名称
+TFTP Boot Files                : {}
+Comment                        : 
+DHCP Tag                       : default
+Distribution                   : CentOS-6.6-x86_64
+Enable gPXE?                   : 0
+Enable PXE Menu?               : 1
+Fetchable Files                : {}
+Kernel Options                 : {}
+Kernel Options (Post Install)  : {}
+Kickstart                      : /var/lib/cobbler/kickstarts/CentOS-6.6-x86_64.cfg		###cfg配置文件
+Kickstart Metadata             : {}
+Management Classes             : []
+Management Parameters          : <<inherit>>
+Name Servers                   : []
+Name Servers Search Path       : []
+Owners                         : ['admin']
+Parent Profile                 : 
+Internal proxy                 : 
+Red Hat Management Key         : <<inherit>>
+Red Hat Management Server      : <<inherit>>
+Repos                          : []
+Server Override                : <<inherit>>
+Template Files                 : {}
+Virt Auto Boot                 : 1
+Virt Bridge                    : xenbr0
+Virt CPUs                      : 1
+Virt Disk Driver Type          : raw
+Virt File Size(GB)             : 5
+Virt Path                      : 
+Virt RAM (MB)                  : 512
+Virt Type                      : kvm
+
+Name                           : CentOS-7.2-x86_64		###名称
+TFTP Boot Files                : {}
+Comment                        : 
+DHCP Tag                       : default
+Distribution                   : CentOS-7.2-x86_64
+Enable gPXE?                   : 0
+Enable PXE Menu?               : 1
+Fetchable Files                : {}
+Kernel Options                 : {'biosdevname': '0', 'net.ifnames': '0'}		###修改网卡配置eth0...eth1显示方式；
+Kernel Options (Post Install)  : {}
+Kickstart                      : /var/lib/cobbler/kickstarts/CentOS-7.2-x86_64.cfg		###cfg配置文件
+Kickstart Metadata             : {}
+Management Classes             : []
+Management Parameters          : <<inherit>>
+Name Servers                   : []
+Name Servers Search Path       : []
+Owners                         : ['admin']
+Parent Profile                 : 
+Internal proxy                 : 
+Red Hat Management Key         : <<inherit>>
+Red Hat Management Server      : <<inherit>>
+Repos                          : []
+Server Override                : <<inherit>>
+Template Files                 : {}
+Virt Auto Boot                 : 1
+Virt Bridge                    : xenbr0
+Virt CPUs                      : 1
+Virt Disk Driver Type          : raw
+Virt File Size(GB)             : 5
+Virt Path                      : 
+Virt RAM (MB)                  : 512
+Virt Type                      : kvm
+</pre>
+\#可以指定名称查看某一个配置的cfg文件：
+<pre>
+[root@linux-node1 kickstarts]# cobbler profile report --name=CentOS-7.2-x86_64
+</pre>
+\#每次修改完都要执行一次同步
+<pre>
+[root@linux-node1 kickstarts]# cobbler sync
+</pre>
+
+![开机选择图片](D:\baolin\Cobbler\Image\开机1选择系统.jpg)
 
 
 
