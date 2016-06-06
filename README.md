@@ -492,7 +492,7 @@ Virt Type                      : kvm
 --static=1 --hostname=linux-node2.com --name-servers="192.168.56.2" \
 --kickstart=/var/lib/cobbler/kickstarts/CentOS-7.2-x86_64.cfg
 \#--name 		自定义，但不能重复   
-\#add  –name    添加一个system配置文件  
+\#add --name    添加一个system配置文件  
 \#--mac 		    客户端的MAC地址   
 \#--profile     profile的名称   
 \#--ip-address  分配给客户端的指定IP   
