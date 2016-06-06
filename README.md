@@ -303,6 +303,7 @@ looking for /var/www/cobbler/ks_mirror/CentOS-7.2-x86_64/repodata/*comps*.xml
 Keeping repodata as-is :/var/www/cobbler/ks_mirror/CentOS-7.2-x86_64/repodata
 *** TASK COMPLETE ***
 #参数注释：
+# import 申明做导入 
 # --path 镜像路径
 # --name 为安装源定义一个名字
 # --arch 指定安装源是32位、64位、ia64, 目前支持的选项有: x86│x86_64│ia64
@@ -490,7 +491,18 @@ Virt Type                      : kvm
 --ip-address=192.168.56.13 --subnet=255.255.255.0 --gateway=192.168.56.2 --interface=eth0 \
 --static=1 --hostname=linux-node2.com --name-servers="192.168.56.2" \
 --kickstart=/var/lib/cobbler/kickstarts/CentOS-7.2-x86_64.cfg
-\#--name 自定义，但不能重复
+\#--name 		自定义，但不能重复   
+\#add  –name    添加一个system配置文件  
+\#--mac 		    客户端的MAC地址   
+\#--profile     profile的名称   
+\#--ip-address  分配给客户端的指定IP   
+\#--subnet 		子网掩码范围   
+\#--gateway		网关   
+\#--interface	将IP配置在指定网口   
+\#--static		指定静态获取地址IP
+\#--hostname		指定主机名   
+\#--name-servers  指定DNS地址   
+\#--kickstart	指定kickstack文件路径  
 </pre>
 * 查看定义的列表
 <pre>
