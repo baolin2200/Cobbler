@@ -4,6 +4,7 @@
 >注：本文内容参考自互联网；
 
 <pre>
+     TestInfo
 </pre>
 ##1.1 Cobbler简介
 &emsp;&emsp;Cobbler 可以用来快速建立 Linux 网络安装环境，它已将 Linux 网络安装的技术门槛，从大专以上文化水平，成功降低到初中以下，连补鞋匠都能学会。
